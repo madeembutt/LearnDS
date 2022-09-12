@@ -3,6 +3,7 @@ import java.util.NoSuchElementException;
 
 /**
  * My implementation of a dynamic array (ArrayList).
+ * Allows for null values.
  */
 public class DynamicArray<E> implements Iterable<E> {
 
@@ -17,7 +18,7 @@ public class DynamicArray<E> implements Iterable<E> {
     private Object[] elements;
 
     /**
-     * Current size of array.
+     * Number of elements in this list.
      */
     private int size;
 
@@ -79,11 +80,9 @@ public class DynamicArray<E> implements Iterable<E> {
      * @param o element to search for
      * @return index of the first occcurrence of {@code o} or -1 if this list doesn't contian it
      */
-    @SuppressWarnings("unchecked")
-    public int indexOf(Object o) {
+    public int indexOf(E e) {
         for (int i = 0; i < size; i++) {
-            E item = (E) o;
-            if (item.equals(elements[i])) {
+            if ((e == null && elements[i] == null) || (e != null && e.equals(elements[i]))) {
                 return i;
             }
         }
@@ -96,7 +95,7 @@ public class DynamicArray<E> implements Iterable<E> {
      * Returns the element that was removed.
      * 
      * @param index
-     * @return the element previously at positoin {@code index}
+     * @return the element previously at position {@code index}
      * @throws ArrayIndexOutOfBoundsException if {@code index} is out of range
      */
     @SuppressWarnings("unchecked")
@@ -120,12 +119,21 @@ public class DynamicArray<E> implements Iterable<E> {
         sb.append("[");
 
         for (int i = 0; i < size - 1; i++) {
-            sb.append(elements[i].toString())
-                .append(",");
+            if (elements[i] == null) {
+                sb.append("null");
+            } else {
+                sb.append(elements[i].toString());
+            }
+            
+            sb.append(", ");
         }
 
         if (size > 0) {
-            sb.append(elements[size - 1].toString());
+            if (elements[size - 1] == null) {
+                sb.append("null");
+            } else {
+                sb.append(elements[size - 1].toString());
+            }
         }
 
         sb.append("]");
@@ -180,7 +188,7 @@ public class DynamicArray<E> implements Iterable<E> {
                     throw new NoSuchElementException();
                 }
 
-                return (E) elements[index];
+                return (E) elements[index++];
             }
         };
     }
