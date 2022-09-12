@@ -6,15 +6,33 @@ import java.util.NoSuchElementException;
  */
 public class DynamicArray<E> implements Iterable<E> {
 
+    /**
+     * Default initial capacity.
+     */
     private static final int INIT_CAPACITY = 16;
 
+    /**
+     * Array elements.
+     */
     private Object[] elements;
+
+    /**
+     * Current size of array.
+     */
     private int size;
 
+    /**
+     * Default constructor that uses {@code INIT_CAPACITY} as its inital capacity.
+     */
     public DynamicArray() {
         this(INIT_CAPACITY);
     }
 
+    /**
+     * Constuctor that uses {@code capacity} as its initial capacity.
+     * 
+     * @param capacity initial capacity
+     */
     public DynamicArray(int capacity) {
         elements = new Object[capacity];
     }
