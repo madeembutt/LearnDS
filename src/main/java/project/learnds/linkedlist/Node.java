@@ -1,3 +1,5 @@
+package project.learnds.linkedlist;
+
 /**
  * Class that represents information with a single element in a linked list.
  */
