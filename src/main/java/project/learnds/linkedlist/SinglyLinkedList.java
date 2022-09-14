@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Classs represnting a singly linked list. Allows for null values.
+ * Class represnting a singly linked list. Allows for null values.
  */
 public class SinglyLinkedList<E> implements Iterable<E> {
     
