@@ -56,6 +56,10 @@ public class SinglyLinkedList<E> implements Iterable<E> {
     public E get(int index) {
         checkBounds(index);
 
+        if (index == (size  - 1)) {
+            return tail.item;
+        }
+
         Node<E> curr = dhead.next;
         for (int i = 0; i < index; i++) {
             curr = curr.next;
