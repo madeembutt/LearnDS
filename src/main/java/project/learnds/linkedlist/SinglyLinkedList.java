@@ -4,12 +4,12 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * My implementation of a singly linked list. Allows for null values.
+ * Classs represnting a singly linked list. Allows for null values.
  */
 public class SinglyLinkedList<E> implements Iterable<E> {
     
     /**
-     * Dummy head node. Eliminates having to check for null value 
+     * Dummy head node. Eliminates having to check for null values 
      * when adding or removing the head.
      */
     private Node<E> dhead;
@@ -53,7 +53,7 @@ public class SinglyLinkedList<E> implements Iterable<E> {
      * 
      * @param index index of the element to return
      * @return element at position {@code index}
-     * @throws ArrayIndexOutOfBoundsException if {@code index} is out of rage
+     * @throws ArrayIndexOutOfBoundsException if {@code index} is out of range
      */
     public E get(int index) {
         checkBounds(index);
@@ -74,7 +74,7 @@ public class SinglyLinkedList<E> implements Iterable<E> {
      * Returns the index of the first occurrence of {@code e} or -1 if this list doesn't contain it.
      * 
      * @param e element to search for
-     * @return index of the first occurrence of {@code e} or -1 if this list doesn't contain it.
+     * @return index of the first occurrence of {@code e} or -1 if this list doesn't contain it
      */
     public int indexOf(E e) {
         if (isEmpty()) {
