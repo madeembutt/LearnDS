@@ -80,6 +80,8 @@ class SinglyLinkedList {
             if ((e === null && curr.item === null) || (e !== null && e === curr.item)) {
                 return i;
             }
+
+            curr = curr.next;
         }
 
         return -1;
@@ -96,7 +98,7 @@ class SinglyLinkedList {
     remove(index) {
         this.#checkBounds(index);
 
-        let curr = this.#dhead.next;
+        let curr = this.#dhead;
         for (let i = -1; i < (index - 1); i++) {
             curr = curr.next;
         }
@@ -181,12 +183,45 @@ class SinglyLinkedList {
     }
 }
 
-let list = new SinglyLinkedList();
-console.log(`${list}`);
+/**
+ * Simple testing function.
+ */
+function testSLL() {
+    const list = new SinglyLinkedList();
+    console.log(`Original: ${list}\n`);
+    
+    list.add(1);
+    list.add(2);
+    list.add(3);
+    
+    console.log(`After adding: ${list}`);
+    console.log(`Size: ${list.size}\n`);
+    
+    console.log("Testing getAt()");
+    for (let i = 0; i < list.size; i++) {
+        console.log(`i: ${i} -> ${list.getAt(i)}`);
+    }
 
-list.add(1);
-list.add(2);
-list.add(3);
+    console.log();
 
-console.log(`${list}`);
-console.log(list.size);
+    console.log("Test indexOf()");
+    console.log(`${list.indexOf(1)}`);
+    console.log(`${list.indexOf(2)}`);
+    console.log(`${list.indexOf(3)}\n`);
+
+    console.log("Tesing remove()");
+    let x = list.remove(0);
+    console.log(`${x} - ${list}`);
+
+    list.add(4);
+    x = list.remove(1);
+    console.log(`${x} - ${list}`);
+
+    list.add(5);
+    x = list.remove(2);
+    console.log(`${x} - ${list}`);
+
+    list.getAt(-1);
+}
+
+testSLL();
