@@ -16,7 +16,7 @@ public class Node<E> {
     Node<E> next;
 
     /**
-     * Default constructor. Sets next pointer to null.
+     * Default constructor. Sets {@code next} pointer to null.
      * 
      * @param item data
      */
