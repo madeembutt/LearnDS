@@ -4,20 +4,52 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Class representing a singly linked list. Allows for null values.
+ * Class representing a doubly linked list. Allows for null values.
  */
-public class SinglyLinkedList<E> implements Iterable<E> {
+public class DoublyLinkedList<E> implements Iterable<E> {
     
     /**
-     * Dummy head node. Eliminates having to check for null values 
+     * Class that represents information with a single element in a doubly linked list.
+     */
+    private class Node<T> {
+
+        /**
+         * Data for this node.
+         */
+        T item;
+
+        /**
+         * Pointer to next node.
+         */
+        Node<T> next;
+
+        /**
+         * Pointer to previous node.
+         */
+        Node<T> prev;
+
+        /**
+         * Default constructor using specified {@code item}. Sets {@code next} and {@code prev} pointers to null.
+         * @param item
+         */
+        public Node(T item) {
+            this.item = item;
+            next = null;
+            prev = null;
+        }
+    }
+
+    /**
+     * Dummy head node. Eliminates having to check for null values
      * when adding or removing the head.
      */
     private Node<E> dhead;
 
     /**
-     * Tail node.
+     * Dummy tail node. Eliminates having to check for null values
+     * when adding or removing the tail.
      */
-    private Node<E> tail;
+    private Node<E> dtail;
 
     /**
      * Number of elements in this list.
@@ -27,9 +59,11 @@ public class SinglyLinkedList<E> implements Iterable<E> {
     /**
      * Sole constructor.
      */
-    public SinglyLinkedList() {
+    public DoublyLinkedList() {
         dhead = new Node<>(null);
-        tail = dhead;
+        dtail = new Node<>(null);
+        dhead.next = dtail;
+        dtail.prev = dhead;
     }
 
     /**
@@ -40,10 +74,12 @@ public class SinglyLinkedList<E> implements Iterable<E> {
      */
     public boolean add(E e) {
         Node<E> newNode = new Node<>(e);
-        tail.next = newNode;
-        tail = newNode; 
+        dtail.prev.next = newNode;
+        newNode.prev = dtail.prev;
+        newNode.next = dtail;
+        dtail.prev = newNode;
 
-        size++;       
+        size++;
 
         return true;
     }
@@ -58,8 +94,8 @@ public class SinglyLinkedList<E> implements Iterable<E> {
     public E get(int index) {
         checkBounds(index);
 
-        if (index == (size  - 1)) {
-            return tail.item;
+        if (index == (size - 1)) {
+            return dtail.prev.item;
         }
 
         Node<E> curr = dhead.next;
@@ -67,7 +103,7 @@ public class SinglyLinkedList<E> implements Iterable<E> {
             curr = curr.next;
         }
 
-        return curr.item;
+        return curr.item;        
     }
 
     /**
@@ -86,6 +122,7 @@ public class SinglyLinkedList<E> implements Iterable<E> {
             if ((e == null && curr.item == null) || (e != null && e.equals(curr.item))) {
                 return i;
             }
+
             curr = curr.next;
         }
 
@@ -103,49 +140,48 @@ public class SinglyLinkedList<E> implements Iterable<E> {
     public E remove(int index) {
         checkBounds(index);
 
-        Node<E> curr = dhead;
-        for (int i = -1; i < (index - 1); i++) {
+        Node<E> curr = dhead.next;
+        for (int i = 0; i < index; i++) {
             curr = curr.next;
         }
 
-        Node<E> retVal = curr.next;
-        curr.next = curr.next.next;
+        curr.prev.next = curr.next;
+        curr.next.prev = curr.prev;
 
-        if (retVal == tail) {
-            tail = curr;
-        }
-        
+        curr.next = null;
+        curr.prev = null;
+
         size--;
 
-        return retVal.item;
+        return curr.item;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        
+
         Node<E> curr = dhead.next;
-        while (curr != null && curr.next != null) {
+        while (curr != dtail && curr.next != dtail) {
             if (curr.item == null) {
                 sb.append("null");
             } else {
                 sb.append(curr.item.toString());
             }
-            
-            sb.append(" -> ");
+
+            sb.append(" <-> ");
 
             curr = curr.next;
         }
 
-        if (curr != null) {
+        if (curr.next == dtail) {
             if (curr.item == null) {
                 sb.append("null");
             } else {
                 sb.append(curr.item.toString());
             }
         }
-        
+
         sb.append("]");
 
         return sb.toString();
@@ -188,12 +224,12 @@ public class SinglyLinkedList<E> implements Iterable<E> {
 
             @Override
             public boolean hasNext() {
-                return curr != null;
+                return curr != dtail;
             }
 
             @Override
             public E next() {
-                if (curr == null) {
+                if (curr == dtail) {
                     throw new NoSuchElementException();
                 }
 
