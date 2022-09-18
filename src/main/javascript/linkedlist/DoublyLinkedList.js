@@ -33,10 +33,26 @@ class Node {
     }
 }
 
+/**
+ * Class representing a doubly linked list. Allows for null values.
+ */
 class DoublyLinkedList {
 
+    /**
+     * Dummyhead node. Eliminates having to check for null values
+     * when adding or removing the head.
+     */
     #dhead;
+
+    /**
+     * Dummy tail node. Eliminates having to check for null values
+     * when adding or removing the tail.
+     */
     #dtail;
+
+    /**
+     * Number of elements in this list.
+     */
     #size;
 
     /**
@@ -47,6 +63,8 @@ class DoublyLinkedList {
         this.#dtail = new Node(null);
         this.#dhead.next = this.#dtail;
         this.#dtail.prev = this.#dhead;
+
+        this.#size = 0;
     }
 
     /**
@@ -77,7 +95,7 @@ class DoublyLinkedList {
     getAt(index) {
         this.#checkBounds(index);
 
-        if (index === (size - 1)) {
+        if (index === (this.#size - 1)) {
             return this.#dtail.prev.item;
         }
 
@@ -105,6 +123,8 @@ class DoublyLinkedList {
             if ((e === null && curr.item === null) || (e !== null && e === curr.item)) {
                 return i;
             }
+
+            curr = curr.next;
         }
 
         return -1;
@@ -121,7 +141,7 @@ class DoublyLinkedList {
     remove(index) {
         this.#checkBounds(index);
 
-        let curr = this.#dhead;
+        let curr = this.#dhead.next;
         for (let i = 0; i < index; i++) {
             curr = curr.next;
         }
@@ -148,7 +168,7 @@ class DoublyLinkedList {
         str += "[";
 
         let curr = this.#dhead.next;
-        while (curr !== null && curr.next !== null) {
+        while (curr !== this.#dtail && curr.next !== this.#dtail) {
             if (curr.item === null) {
                 str += "null";
             } else {
@@ -160,7 +180,7 @@ class DoublyLinkedList {
             curr = curr.next;
         }
 
-        if (curr != null) {
+        if (curr != this.#dtail) {
             if (curr.item === null) {
                 str += "null";
             } else {
