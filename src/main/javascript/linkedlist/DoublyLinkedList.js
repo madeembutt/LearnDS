@@ -227,7 +227,7 @@ class DoublyLinkedList {
 /**
  * Simple testing function.
  */
- function testSLL() {
+ function testDLL() {
     const list = new DoublyLinkedList();
     console.log(`Original: ${list}\n`);
     
@@ -265,4 +265,4 @@ class DoublyLinkedList {
     list.getAt(-1);
 }
 
-testSLL();
+testDLL();
