@@ -1,33 +1,52 @@
-import { Node } from "./Node.js";
-
 /**
- * Class representing a singly linked list. Allows for null values.
+ * Class that represents information with a single element in a doubly linked list.
  */
-class SinglyLinkedList {
+class Node {
 
     /**
-     * Dummy head node. Eliminates having to check for null values
-     * when adding or removing the head.
+     * Data for this node.
      */
+    item;
+
+    /**
+     * Pointer to next node.
+     */
+    next;
+
+    /**
+     * Pointer to previous node.
+     */
+    prev;
+
+    /**
+     * Creates a Node with the specified item and next values. 
+     * Next is null by default.
+     * 
+     * @param {*} item data
+     * @param {*} [next] pointer to next node 
+     * @param {*} [prev] pointer to previous node
+     */
+    constructor(item, next = null, prev = null) {
+        this.item = item;
+        this.next = next;
+        this.prev = prev;
+    }
+}
+
+class DoublyLinkedList {
+
     #dhead;
-
-    /**
-     * Tail node.
-     */
-    #tail;
-
-    /**
-     * Number of elements in this list.
-     */
+    #dtail;
     #size;
 
     /**
-     * Create a SinglyLinkedList.
+     * Create a DoublyLinkedList.
      */
     constructor() {
         this.#dhead = new Node(null);
-        this.#tail = this.#dhead;
-        this.#size = 0;
+        this.#dtail = new Node(null);
+        this.#dhead.next = this.#dtail;
+        this.#dtail.prev = this.#dhead;
     }
 
     /**
@@ -38,11 +57,13 @@ class SinglyLinkedList {
      */
     add(e) {
         const newNode = new Node(e);
-        this.#tail.next = newNode;
-        this.#tail = newNode;
+        this.#dtail.prev.next = newNode;
+        newNode.prev = this.#dtail.prev;
+        newNode.next = this.#dtail;
+        this.#dtail.prev = newNode;
 
         this.#size++;
-
+        
         return true;
     }
 
@@ -55,6 +76,10 @@ class SinglyLinkedList {
      */
     getAt(index) {
         this.#checkBounds(index);
+
+        if (index === (size - 1)) {
+            return this.#dtail.prev.item;
+        }
 
         let curr = this.#dhead.next;
         for (let i = 0; i < index; i++) {
@@ -80,8 +105,6 @@ class SinglyLinkedList {
             if ((e === null && curr.item === null) || (e !== null && e === curr.item)) {
                 return i;
             }
-
-            curr = curr.next;
         }
 
         return -1;
@@ -99,20 +122,19 @@ class SinglyLinkedList {
         this.#checkBounds(index);
 
         let curr = this.#dhead;
-        for (let i = -1; i < (index - 1); i++) {
+        for (let i = 0; i < index; i++) {
             curr = curr.next;
         }
 
-        const retVal = curr.next;
-        curr.next = curr.next.next;
+        curr.prev.next = curr.next;
+        curr.next.prev = curr.prev;
 
-        if (retVal === this.#tail) {
-            this.#tail = curr;
-        }
+        curr.next = null;
+        curr.prev = null;
 
         this.#size--;
 
-        return retVal.item;
+        return curr.item;
     }
 
     /**
@@ -121,7 +143,6 @@ class SinglyLinkedList {
      * @returns {string} string representation of a SinglyLinkedList
      */
     toString() {
-        //const capacity = !this.isEmpty() ? 2 + (2 * (this.#size - 1)) + 1 : 2;
         let str = "";
 
         str += "[";
@@ -134,7 +155,7 @@ class SinglyLinkedList {
                 str += curr.item.toString();
             }
 
-            str += " -> ";
+            str += " <-> ";
 
             curr = curr.next;
         }
@@ -173,7 +194,7 @@ class SinglyLinkedList {
     /**
      * Checks if index is out of range.
      * 
-     * @param {number} index index to check
+     * @param {number} index index to check 
      * @throws Will throw an error if index is out of range
      */
     #checkBounds(index) {
@@ -186,8 +207,8 @@ class SinglyLinkedList {
 /**
  * Simple testing function.
  */
-function testSLL() {
-    const list = new SinglyLinkedList();
+ function testSLL() {
+    const list = new DoublyLinkedList();
     console.log(`Original: ${list}\n`);
     
     list.add(1);
